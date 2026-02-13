@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: "Raw data sources for NYC taxi rides"
+    # proj id
+    database: strategic-cacao-484207-e4
+    schema: zoomcamp
+    tables:
+      - name: yellow_tripdata
+      - name: green_tripdata
