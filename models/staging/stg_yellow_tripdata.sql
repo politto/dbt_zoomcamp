@@ -14,7 +14,7 @@ select
     cast(passenger_count as int) as passenger_count,
     -- change from float to float64
     cast(trip_distance as float64) as trip_distance,
-    cast(trip_type as int) as trip_type,
+    1 as trip_type,
 
     --payment info
     cast(fare_amount as numeric) as fare_amount,
@@ -24,7 +24,9 @@ select
     cast(tolls_amount as numeric) as tolls_amount,
     cast(improvement_surcharge as numeric) as improvement_surcharge,
     cast(total_amount as numeric) as total_amount,
-    cast(payment_type as numeric) as payment_type
+    cast(payment_type as numeric) as payment_type,
+    -- online request for taxi fee (yellow not having this)
+    0 as ehail_fee
 
 --                     raw data                 table 
 from {{ source('raw_data', 'yellow_tripdata')}}

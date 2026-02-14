@@ -24,7 +24,9 @@ select
     cast(tolls_amount as numeric) as tolls_amount,
     cast(improvement_surcharge as numeric) as improvement_surcharge,
     cast(total_amount as numeric) as total_amount,
-    cast(payment_type as numeric) as payment_type
+    cast(payment_type as numeric) as payment_type,
+    cast(ehail_fee as numeric) as ehail_fee
 
 --                     raw data                 table 
 from {{ source('raw_data', 'green_tripdata')}}
+where vendorid is not null
