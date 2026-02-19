@@ -29,5 +29,6 @@ select
     0 as ehail_fee
 
 --                     raw data                 table 
-from {{ source('raw_data', 'yellow_tripdata')}}
+-- from {{ source('raw_data', 'yellow_tripdata')}}
+from {{ source('raw_data', 'external_yl_19_20')}}
 where vendorid is not null

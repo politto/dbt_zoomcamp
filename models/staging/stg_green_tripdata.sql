@@ -28,5 +28,6 @@ select
     cast(ehail_fee as numeric) as ehail_fee
 
 --                     raw data                 table 
-from {{ source('raw_data', 'green_tripdata')}}
+-- from {{ source('raw_data', 'green_tripdata')}}
+from {{ source('raw_data', 'external_gr_19_20')}}
 where vendorid is not null

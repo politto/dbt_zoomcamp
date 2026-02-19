@@ -9,3 +9,5 @@ sources:
     tables:
       - name: yellow_tripdata
       - name: green_tripdata
+      - name: external_gr_19_20
+      - name: external_yl_19_20
