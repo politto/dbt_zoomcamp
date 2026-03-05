@@ -1,0 +1,40 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: "Raw data sources for NYC taxi rides"
+    # proj id
+    database: strategic-cacao-484207-e4
+    schema: zoomcamp
+    tables:
+      - name: yellow_tripdata
+      - name: green_tripdata
+      - name: external_gr_19_20_p
+        description: >
+          Green taxi trip records for 2019-2020. 
+          **Optimized with Partitioning by Day** on `lpep_pickup_datetime` 
+          to reduce scan costs and improve query performance.
+        columns:
+          - name: vendor_id
+            description: > 
+              LPEP provider code.
+              1: Creative mobile technologies
+              2: VeriFine Inc.
+              4: Unknown/other.
+          - name: lpep_pickup_datetime
+            description: "Partition column. The date and time when the meter was engaged."
+
+      - name: external_yl_19_20_p
+        description: >
+          Yellow taxi trip records for 2019-2020. 
+          **Optimized with Partitioning by Day** on `tpep_pickup_datetime`. 
+          Always use a date filter on this column to stay within the 1GB scan limit.
+        columns:
+          - name: vendor_id
+            description: > 
+              TPEP provider code.
+              1: Creative mobile technologies
+              2: VeriFine Inc.
+              4: Unknown/other.
+          - name: tpep_pickup_datetime
+            description: "Partition column. The date and time when the meter was engaged."
