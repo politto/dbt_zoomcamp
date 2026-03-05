@@ -29,5 +29,5 @@ select
 
 --                     raw data                 table 
 -- from {{ source('raw_data', 'green_tripdata')}}
-from {{ source('raw_data', 'external_gr_19_20')}}
+from {{ source('raw_data', 'external_gr_19_20_p')}}
 where vendorid is not null

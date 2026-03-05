@@ -1,38 +1,40 @@
-
 {{
   config(
-    materialized='table'
+    materialized='incremental',
+    unique_key='trip_id',
+    on_schema_change='append_new_columns'
   )
 }}
 
 with green_tripdata as (
-    --way to reference if no source provided in sources.yml file
-    select * from {{ref('stg_green_tripdata')}}
+    select * from {{ ref('stg_green_tripdata') }}
+    where pickup_datetime >= '2019-01-01' and pickup_datetime < '2019-02-01'
+    -- Update these dates for each "chunk" run
 ),
 
 yellow_tripdata as (
-    --way to reference if no source provided in sources.yml file
-    select * from {{ref('stg_yellow_tripdata')}}
+    select * from {{ ref('stg_yellow_tripdata') }}
+    where pickup_datetime >= '2019-01-01' and pickup_datetime < '2019-02-01'
 ),
 
 trips_unioned as (
-    select * from green_tripdata
+    select 
+        -- Create a unique ID for the merge to work
+        md5(cast(concat(vendor_id, pickup_datetime) as string)) as trip_id,
+        * from green_tripdata
     union all
-    select * from yellow_tripdata
+    select 
+        md5(cast(concat(vendor_id, pickup_datetime) as string)) as trip_id,
+        * from yellow_tripdata
+),
+
+deduplicated_trips as (
+    select *,
+        row_number() over(
+            partition by vendor_id, pickup_datetime, passenger_count
+            order by pickup_datetime
+        ) as rn
+    from trips_unioned
 )
 
--- select * from trips_unioned
-select distinct vendor_id from trips_unioned
-
--- deduplicated_trips as (
---     select *,
---         row_number() over(
---             partition by vendor_id, pickup_datetime, passenger_count
---             order by pickup_datetime
---         ) as rn
---     from trips_unioned
--- )
-
--- select *, except(rn)
--- from deduplicated_trips
--- where rn = 1
+select * except(rn) from deduplicated_trips where rn = 1

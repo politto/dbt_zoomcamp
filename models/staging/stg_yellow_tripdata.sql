@@ -30,5 +30,5 @@ select
 
 --                     raw data                 table 
 -- from {{ source('raw_data', 'yellow_tripdata')}}
-from {{ source('raw_data', 'external_yl_19_20')}}
+from {{ source('raw_data', 'external_yl_19_20_p')}}
 where vendorid is not null
